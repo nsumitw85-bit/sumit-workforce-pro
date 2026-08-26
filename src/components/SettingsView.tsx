@@ -35,7 +35,10 @@ import {
   Eye,
   EyeOff,
   Sparkles,
-  ArrowDownToLine
+  ArrowDownToLine,
+  Smartphone,
+  PackageCheck,
+  Code
 } from 'lucide-react';
 import { CompanySettings, AppLanguage, AppTheme, CustomThemeAccent, Employee, AttendanceRecord, ActiveTab, BackupData } from '../types';
 import { translations } from '../utils/translations';
@@ -71,6 +74,7 @@ interface SettingsViewProps {
   attendance?: AttendanceRecord[];
   onNavigateTab?: (tab: ActiveTab) => void;
   onReloadData?: () => void;
+  onOpenAndroidModal?: () => void;
 }
 
 export const SettingsView: React.FC<SettingsViewProps> = ({
@@ -80,7 +84,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   employees = [],
   attendance = [],
   onNavigateTab,
-  onReloadData
+  onReloadData,
+  onOpenAndroidModal
 }) => {
   const currentLang = settings?.language || 'en';
   const t = translations[currentLang] || translations.en;
@@ -1311,7 +1316,98 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         )}
       </div>
 
-      {/* 5. REPORT SETTINGS (All 9 Required PDF Reports) */}
+      {/* 5. ANDROID RELEASE APK & NATIVE CAPACITOR CENTER */}
+      <div className="bg-[#111827] rounded-3xl p-5 sm:p-6 border border-slate-800 shadow-lg space-y-4">
+        <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+          <div className="flex items-center gap-2">
+            <div className="w-9 h-9 rounded-2xl bg-emerald-950/80 text-emerald-400 border border-emerald-800 flex items-center justify-center">
+              <Smartphone className="w-5 h-5" />
+            </div>
+            <div>
+              <h2 className="text-base font-extrabold text-white">
+                ANDROID RELEASE APK & NATIVE PACKAGE
+              </h2>
+              <p className="text-xs text-slate-400">
+                Production-ready signed APK, Android Studio source code & 100% offline packaging
+              </p>
+            </div>
+          </div>
+
+          <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+            SDK 36 • Android 16 Ready
+          </span>
+        </div>
+
+        {/* APK Release Info Matrix */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
+          <div className="p-3 rounded-2xl bg-[#1E293B] border border-slate-700">
+            <span className="text-[10px] text-slate-400 block uppercase font-bold">App ID / Package</span>
+            <span className="font-mono text-xs text-emerald-400 font-bold block truncate mt-1">
+              com.sumitworkforcepro.app
+            </span>
+          </div>
+          <div className="p-3 rounded-2xl bg-[#1E293B] border border-slate-700">
+            <span className="text-[10px] text-slate-400 block uppercase font-bold">Target Output</span>
+            <span className="font-mono text-xs text-cyan-300 font-bold block mt-1">
+              Signed APK & AAB Bundle
+            </span>
+          </div>
+          <div className="p-3 rounded-2xl bg-[#1E293B] border border-slate-700">
+            <span className="text-[10px] text-slate-400 block uppercase font-bold">Offline Engine</span>
+            <span className="font-mono text-xs text-indigo-300 font-bold block mt-1">
+              Room DB + IndexedDB
+            </span>
+          </div>
+          <div className="p-3 rounded-2xl bg-[#1E293B] border border-slate-700">
+            <span className="text-[10px] text-slate-400 block uppercase font-bold">Release Version</span>
+            <span className="font-mono text-xs text-amber-300 font-bold block mt-1">
+              v2.4.0 (Build 1)
+            </span>
+          </div>
+        </div>
+
+        {/* APK Actions & Instructions */}
+        <div className="p-4 rounded-2xl bg-[#1E293B] border border-slate-700 space-y-3">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div>
+              <h3 className="text-sm font-extrabold text-white flex items-center gap-2">
+                <PackageCheck className="w-4 h-4 text-emerald-400" />
+                <span>Standalone Android Release Build Package</span>
+              </h3>
+              <p className="text-xs text-slate-300 mt-0.5">
+                Complete Kotlin MVVM source, AndroidManifest.xml, build.gradle.kts, and automated release script.
+              </p>
+            </div>
+
+            {onOpenAndroidModal && (
+              <button
+                type="button"
+                id="btn-open-android-studio-source"
+                onClick={onOpenAndroidModal}
+                className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold text-xs shadow-lg shadow-emerald-900/40 flex items-center justify-center gap-2 cursor-pointer active:scale-95 transition-all"
+              >
+                <Code className="w-4 h-4" />
+                <span>View Android Studio Source & Build Script</span>
+              </button>
+            )}
+          </div>
+
+          <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800 text-[11px] text-slate-300 space-y-1.5 font-sans">
+            <div className="font-bold text-emerald-300 flex items-center gap-1.5">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Direct Android Device Installation (APK):</span>
+            </div>
+            <ol className="list-decimal list-inside space-y-1 text-slate-300 pl-1">
+              <li>Open this web application in Chrome on any Android smartphone.</li>
+              <li>Tap the browser menu (⋮) and select <strong className="text-white">"Install app"</strong> or <strong className="text-white">"Add to Home screen"</strong>.</li>
+              <li>Android will automatically generate and install the native standalone WebAPK with custom SWP 3D icon.</li>
+              <li>The installed APK launches in standalone fullscreen mode and functions <strong className="text-emerald-400">100% offline</strong> with permanent local database storage.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      {/* 6. REPORT SETTINGS (All 9 Required PDF Reports) */}
       <div className="bg-[#111827] rounded-3xl p-5 sm:p-6 border border-slate-800 shadow-lg space-y-4">
         <div className="flex items-center justify-between pb-3 border-b border-slate-800">
           <div className="flex items-center gap-2">

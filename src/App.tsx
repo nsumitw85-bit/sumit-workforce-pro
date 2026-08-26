@@ -322,6 +322,7 @@ export default function App() {
             attendance={attendance}
             onNavigateTab={(tab) => setActiveTab(tab)}
             onReloadData={reloadData}
+            onOpenAndroidModal={() => setIsAndroidModalOpen(true)}
           />
         )}
 

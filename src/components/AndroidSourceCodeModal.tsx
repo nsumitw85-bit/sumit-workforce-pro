@@ -394,6 +394,73 @@ dependencies {
     // Biometric Authentication
     implementation(libs.androidx.biometric)
 }`
+    },
+
+    'ReleaseBuildGuide': {
+      path: 'build-release-apk.sh',
+      language: 'bash',
+      content: `#!/usr/bin/env bash
+# ==============================================================================
+# SUMIT WORKFORCE PRO - PRODUCTION SIGNED RELEASE APK BUILD SCRIPT
+# Target: Android SDK 36 (100% Offline, Room DB, Jetpack Compose Material 3)
+# ==============================================================================
+
+set -e
+
+echo "==> Step 1: Compiling Web Distribution Assets..."
+npm run build
+
+echo "==> Step 2: Synchronizing Capacitor Android Project..."
+npx cap sync android
+
+echo "==> Step 3: Generating Signed Release Keystore (if not exists)..."
+if [ ! -f "app/release-key.jks" ]; then
+  keytool -genkey -v -keystore app/release-key.jks -alias sumitworkforce \\
+    -keyalg RSA -keysize 2048 -validity 10000 \\
+    -dname "CN=Sumit Workforce, OU=Production, O=Sumit Enterprises, L=Mumbai, ST=Maharashtra, C=IN" \\
+    -storepass "SumitPro@2026" -keypass "SumitPro@2026"
+fi
+
+echo "==> Step 4: Building Signed Production Release APK & AAB..."
+cd android
+./gradlew assembleRelease
+./gradlew bundleRelease
+
+echo "=============================================================================="
+echo "✅ BUILD SUCCESSFUL!"
+echo "📍 Signed Release APK: android/app/build/outputs/apk/release/app-release.apk"
+echo "📍 Google Play AAB:    android/app/build/outputs/bundle/release/app-release.aab"
+echo "=============================================================================="
+`
+    },
+
+    'CapacitorConfig': {
+      path: 'capacitor.config.json',
+      language: 'json',
+      content: `{
+  "appId": "com.sumitworkforcepro.app",
+  "appName": "SUMIT WORKFORCE PRO",
+  "webDir": "dist",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https",
+    "cleartext": true
+  },
+  "android": {
+    "allowMixedContent": true,
+    "captureInput": true,
+    "webContentsDebuggingEnabled": false
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1500,
+      "launchAutoHide": true,
+      "backgroundColor": "#020617",
+      "androidSplashResourceName": "splash",
+      "androidScaleType": "CENTER_CROP"
+    }
+  }
+}`
     }
   };
 

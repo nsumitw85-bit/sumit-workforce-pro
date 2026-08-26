@@ -1,0 +1,19 @@
+{
+  "name": "SUMIT WORKFORCE PRO",
+  "short_name": "SWP Pro",
+  "description": "Smart Attendance & Workforce Salary Management System with A4 PDF & WhatsApp Sharing",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#020617",
+  "theme_color": "#020617",
+  "categories": ["business", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
