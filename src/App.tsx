@@ -239,8 +239,12 @@ export default function App() {
         onOpenBulkAttendance={() => setIsBulkAttendanceOpen(true)}
       />
 
-      {/* 4. Main Body Container with Adaptive Padding */}
-      <main id="main-content-view" className="flex-1 w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5">
+      {/* 4. Main Body Container with Adaptive Padding & Scrollability */}
+      <main
+        id="main-content-view"
+        className="flex-1 w-full max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 py-3.5 sm:py-5 overflow-y-auto"
+        style={{ paddingBottom: 'calc(4.75rem + max(env(safe-area-inset-bottom, 0px), 16px))' }}
+      >
         
         {/* Tab 1: Dashboard */}
         {activeTab === 'dashboard' && (

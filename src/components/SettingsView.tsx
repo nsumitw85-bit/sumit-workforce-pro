@@ -472,7 +472,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   ];
 
   return (
-    <div id="settings-view-container" className="space-y-6 pb-20 max-w-4xl mx-auto animate-fade-in text-white">
+    <div id="settings-view-container" className="space-y-4 sm:space-y-5 max-w-4xl mx-auto animate-fade-in text-white">
       
       {/* Header Bar */}
       <div className="bg-[#111827] rounded-3xl p-5 border border-slate-800 shadow-lg flex items-center justify-between">

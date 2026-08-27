@@ -56,21 +56,22 @@ export const TopAppBar: React.FC<TopAppBarProps> = ({
     <header
       id="top-app-bar"
       className="sticky top-0 z-30 w-full bg-gradient-to-r from-[#111827] via-[#0F172A] to-[#1E293B] border-b border-slate-800 text-white transition-colors shadow-lg"
+      style={{ paddingTop: 'max(env(safe-area-inset-top, 0px), 0px)' }}
     >
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-15 flex items-center justify-between gap-2">
+      <div className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 h-13 sm:h-14 flex items-center justify-between gap-1.5 sm:gap-2">
         {/* Left: Branding */}
-        <div className="flex items-center gap-2 min-w-0">
+        <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
           <BrandLogo size="sm" showText={true} />
         </div>
 
         {/* Right Actions */}
-        <div className="flex items-center gap-1.5 sm:gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
           {/* Global Search Button */}
           {onOpenSearch && (
             <button
               id="top-bar-search-btn"
               onClick={onOpenSearch}
-              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full bg-[#1E293B] text-slate-200 text-xs font-semibold hover:bg-slate-700 transition-all border border-slate-700"
+              className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-full bg-[#1E293B] text-slate-200 text-xs font-semibold hover:bg-slate-700 transition-all border border-slate-700 active:scale-95"
               title="Search Employees (Ctrl+K)"
             >
               <Search className="w-3.5 h-3.5 text-slate-300" />
@@ -82,7 +83,7 @@ export const TopAppBar: React.FC<TopAppBarProps> = ({
           <button
             id="top-bar-bulk-att-btn"
             onClick={bulkAtt}
-            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-950/60 text-emerald-300 text-xs font-bold hover:bg-emerald-900/80 transition-all border border-emerald-800/60 shadow-xs"
+            className="hidden sm:flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full bg-emerald-950/60 text-emerald-300 text-xs font-bold hover:bg-emerald-900/80 transition-all border border-emerald-800/60 shadow-xs active:scale-95"
             title="Bulk Attendance"
           >
             <CheckSquare className="w-3.5 h-3.5 text-emerald-400" />
@@ -93,7 +94,7 @@ export const TopAppBar: React.FC<TopAppBarProps> = ({
           <button
             id="top-bar-add-emp-btn"
             onClick={addEmp}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-md shadow-emerald-900/40"
+            className="flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-md shadow-emerald-900/40 active:scale-95"
             title="Add Staff"
           >
             <Plus className="w-3.5 h-3.5" />
@@ -104,7 +105,7 @@ export const TopAppBar: React.FC<TopAppBarProps> = ({
           <button
             id="top-bar-lang-toggle"
             onClick={() => onChangeLanguage(nextLanguage[currentLang])}
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-[#1E293B] hover:bg-slate-700 text-slate-200 text-xs font-bold transition-colors border border-slate-700"
+            className="flex items-center gap-1 px-2 sm:px-2.5 py-1.5 rounded-full bg-[#1E293B] hover:bg-slate-700 text-slate-200 text-xs font-bold transition-colors border border-slate-700 active:scale-95"
             title="Switch Language (English / Hindi / Marathi)"
           >
             <Globe className="w-3.5 h-3.5 text-emerald-400" />
@@ -115,7 +116,7 @@ export const TopAppBar: React.FC<TopAppBarProps> = ({
           <button
             id="top-bar-theme-toggle"
             onClick={toggleTheme}
-            className="p-2 rounded-full text-slate-300 hover:bg-slate-800 transition-colors"
+            className="p-1.5 sm:p-2 rounded-full text-slate-300 hover:bg-slate-800 transition-colors active:scale-95"
             title="Dark Theme Active"
           >
             <Moon className="w-4 h-4 text-indigo-400" />

@@ -242,7 +242,7 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
   };
 
   return (
-    <div className="space-y-6 pb-20 max-w-4xl mx-auto text-slate-100">
+    <div className="space-y-4 sm:space-y-5 max-w-4xl mx-auto text-slate-100">
       {/* Header Bar */}
       <div className="bg-[#111827] rounded-2xl p-4 sm:p-5 border border-slate-800 shadow-xl space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">

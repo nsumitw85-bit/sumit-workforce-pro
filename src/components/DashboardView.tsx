@@ -146,31 +146,31 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   );
 
   return (
-    <div id="dashboard-view-container" className="space-y-6 pb-20 animate-fade-in max-w-7xl mx-auto text-slate-100">
+    <div id="dashboard-view-container" className="space-y-4 sm:space-y-6 animate-fade-in max-w-7xl mx-auto text-slate-100">
       
       {/* Welcome Banner */}
-      <div className="rounded-3xl bg-gradient-to-r from-[#111827] via-[#1E293B] to-[#111827] text-white p-6 sm:p-8 shadow-xl relative overflow-hidden border border-slate-800">
+      <div className="rounded-2xl sm:rounded-3xl bg-gradient-to-r from-[#111827] via-[#1E293B] to-[#111827] text-white p-4 sm:p-6 md:p-8 shadow-xl relative overflow-hidden border border-slate-800">
         <div className="absolute right-0 top-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase tracking-wider">
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6">
+          <div className="space-y-1 sm:space-y-1.5">
+            <div className="flex items-center gap-1.5 text-emerald-400 text-[11px] sm:text-xs font-bold uppercase tracking-wider">
               <Calendar className="w-3.5 h-3.5" />
               <span>{formattedDate}</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight text-white">
               {settings.companyName}
             </h1>
-            <p className="text-sm text-slate-300 max-w-xl">
+            <p className="text-xs sm:text-sm text-slate-300 max-w-xl">
               {t.appTagline} • Smart P, A, D Attendance & 2x Double Duty Payroll
             </p>
           </div>
 
           {/* Quick Action Button Group */}
-          <div className="flex flex-wrap items-center gap-2.5">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
             <button
               id="dashboard-mark-today-btn"
               onClick={() => onNavigateTab('attendance')}
-              className="px-4 py-2.5 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center gap-2 shadow-lg shadow-emerald-500/20 transition-all active:scale-95"
+              className="px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 sm:gap-2 shadow-lg shadow-emerald-500/20 transition-all active:scale-95 cursor-pointer"
             >
               <CheckCircle2 className="w-4 h-4" />
               <span>{t.markAttendanceBtn}</span>
@@ -179,7 +179,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             <button
               id="dashboard-share-whatsapp-btn"
               onClick={handleShareTodayWhatsApp}
-              className="px-4 py-2.5 rounded-2xl bg-[#1E293B] hover:bg-slate-700 text-white font-semibold text-xs flex items-center gap-2 border border-slate-700 transition-all active:scale-95 shadow-xs"
+              className="px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl bg-[#1E293B] hover:bg-slate-700 text-white font-semibold text-xs flex items-center gap-1.5 sm:gap-2 border border-slate-700 transition-all active:scale-95 shadow-xs cursor-pointer"
               title="Share Today's Summary via WhatsApp"
             >
               <Share2 className="w-4 h-4 text-emerald-400" />
@@ -190,20 +190,20 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       </div>
 
       {/* Primary KPI Grid: 5 Status & Cost Counters */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-3.5">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3.5">
         
         {/* Total Employees */}
         <div
           onClick={() => onNavigateTab('employees')}
-          className="p-4 rounded-2xl bg-[#111827] border border-slate-800 shadow-lg hover:border-blue-500 transition-all cursor-pointer group"
+          className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-[#111827] border border-slate-800 shadow-lg hover:border-blue-500 transition-all cursor-pointer group active:scale-98"
         >
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold text-slate-400">{t.totalStaff}</span>
-            <div className="w-7 h-7 rounded-xl bg-blue-950/80 text-blue-400 flex items-center justify-center group-hover:scale-110 transition-transform border border-blue-800/40">
+          <div className="flex items-center justify-between mb-1.5 sm:mb-2">
+            <span className="text-[11px] sm:text-xs font-semibold text-slate-400">{t.totalStaff}</span>
+            <div className="w-6.5 sm:w-7 h-6.5 sm:h-7 rounded-lg sm:rounded-xl bg-blue-950/80 text-blue-400 flex items-center justify-center group-hover:scale-110 transition-transform border border-blue-800/40">
               <Users className="w-3.5 h-3.5" />
             </div>
           </div>
-          <div className="text-2xl font-extrabold text-white">
+          <div className="text-xl sm:text-2xl font-extrabold text-white">
             {totalCount}
           </div>
           <div className="text-[10px] text-slate-400 mt-0.5">
@@ -214,15 +214,15 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         {/* Present Today (P) */}
         <div
           onClick={() => onNavigateTab('attendance')}
-          className="p-4 rounded-2xl bg-[#111827] border border-emerald-900/60 shadow-lg hover:border-emerald-500 transition-all cursor-pointer group"
+          className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-[#111827] border border-emerald-900/60 shadow-lg hover:border-emerald-500 transition-all cursor-pointer group active:scale-98"
         >
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold text-emerald-400">{t.present} (P)</span>
-            <div className="w-7 h-7 rounded-xl bg-emerald-950/80 text-emerald-400 flex items-center justify-center group-hover:scale-110 transition-transform border border-emerald-800/40">
+          <div className="flex items-center justify-between mb-1.5 sm:mb-2">
+            <span className="text-[11px] sm:text-xs font-semibold text-emerald-400">{t.present} (P)</span>
+            <div className="w-6.5 sm:w-7 h-6.5 sm:h-7 rounded-lg sm:rounded-xl bg-emerald-950/80 text-emerald-400 flex items-center justify-center group-hover:scale-110 transition-transform border border-emerald-800/40">
               <CheckCircle2 className="w-3.5 h-3.5" />
             </div>
           </div>
-          <div className="text-2xl font-extrabold text-emerald-400">
+          <div className="text-xl sm:text-2xl font-extrabold text-emerald-400">
             {presentToday}
           </div>
           <div className="text-[10px] text-emerald-400/80 mt-0.5 font-medium">
@@ -233,18 +233,18 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         {/* Double Duty Today (D) */}
         <div
           onClick={() => onNavigateTab('attendance')}
-          className="p-4 rounded-2xl bg-[#111827] border border-blue-900/60 shadow-lg hover:border-blue-500 transition-all cursor-pointer group relative overflow-hidden"
+          className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-[#111827] border border-blue-900/60 shadow-lg hover:border-blue-500 transition-all cursor-pointer group relative overflow-hidden active:scale-98"
         >
           <div className="absolute top-0 right-0 bg-blue-600 text-white text-[8px] font-black px-1.5 py-0.2 rounded-bl">
             2x
           </div>
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold text-blue-400">{t.doubleDuty} (D)</span>
-            <div className="w-7 h-7 rounded-xl bg-blue-950/80 text-blue-400 flex items-center justify-center group-hover:scale-110 transition-transform border border-blue-800/40">
+          <div className="flex items-center justify-between mb-1.5 sm:mb-2">
+            <span className="text-[11px] sm:text-xs font-semibold text-blue-400">{t.doubleDuty} (D)</span>
+            <div className="w-6.5 sm:w-7 h-6.5 sm:h-7 rounded-lg sm:rounded-xl bg-blue-950/80 text-blue-400 flex items-center justify-center group-hover:scale-110 transition-transform border border-blue-800/40">
               <Layers className="w-3.5 h-3.5" />
             </div>
           </div>
-          <div className="text-2xl font-extrabold text-blue-400">
+          <div className="text-xl sm:text-2xl font-extrabold text-blue-400">
             {doubleDutyToday}
           </div>
           <div className="text-[10px] text-blue-400 mt-0.5 font-bold">
@@ -255,15 +255,15 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         {/* Absent Today (A) */}
         <div
           onClick={() => onNavigateTab('attendance')}
-          className="p-4 rounded-2xl bg-[#111827] border border-rose-900/60 shadow-lg hover:border-rose-500 transition-all cursor-pointer group"
+          className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-[#111827] border border-rose-900/60 shadow-lg hover:border-rose-500 transition-all cursor-pointer group active:scale-98"
         >
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold text-rose-400">{t.absent} (A)</span>
-            <div className="w-7 h-7 rounded-xl bg-rose-950/80 text-rose-400 flex items-center justify-center group-hover:scale-110 transition-transform border border-rose-800/40">
+          <div className="flex items-center justify-between mb-1.5 sm:mb-2">
+            <span className="text-[11px] sm:text-xs font-semibold text-rose-400">{t.absent} (A)</span>
+            <div className="w-6.5 sm:w-7 h-6.5 sm:h-7 rounded-lg sm:rounded-xl bg-rose-950/80 text-rose-400 flex items-center justify-center group-hover:scale-110 transition-transform border border-rose-800/40">
               <XCircle className="w-3.5 h-3.5" />
             </div>
           </div>
-          <div className="text-2xl font-extrabold text-rose-400">
+          <div className="text-xl sm:text-2xl font-extrabold text-rose-400">
             {absentToday}
           </div>
           <div className="text-[10px] text-rose-400/80 mt-0.5 font-medium">
@@ -274,15 +274,15 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         {/* Today's Salary Cost */}
         <div
           onClick={() => onNavigateTab('salary')}
-          className="col-span-2 sm:col-span-1 p-4 rounded-2xl bg-[#111827] border border-purple-900/60 shadow-lg hover:border-purple-500 transition-all cursor-pointer group"
+          className="col-span-2 sm:col-span-1 p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-[#111827] border border-purple-900/60 shadow-lg hover:border-purple-500 transition-all cursor-pointer group active:scale-98"
         >
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold text-purple-400">Today's Cost</span>
-            <div className="w-7 h-7 rounded-xl bg-purple-950/80 text-purple-400 flex items-center justify-center group-hover:scale-110 transition-transform border border-purple-800/40">
+          <div className="flex items-center justify-between mb-1.5 sm:mb-2">
+            <span className="text-[11px] sm:text-xs font-semibold text-purple-400">Today's Cost</span>
+            <div className="w-6.5 sm:w-7 h-6.5 sm:h-7 rounded-lg sm:rounded-xl bg-purple-950/80 text-purple-400 flex items-center justify-center group-hover:scale-110 transition-transform border border-purple-800/40">
               <Banknote className="w-3.5 h-3.5" />
             </div>
           </div>
-          <div className="text-2xl font-extrabold text-purple-300">
+          <div className="text-xl sm:text-2xl font-extrabold text-purple-300">
             {settings.currencySymbol}{todaySalaryCost.toLocaleString('en-IN')}
           </div>
           <div className="text-[10px] text-purple-400/80 mt-0.5 font-bold">
@@ -293,7 +293,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       </div>
 
       {/* Data Safety & Month History Quick Action Hub */}
-      <div className="bg-[#111827] rounded-3xl p-4 sm:p-5 border border-slate-800 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-[#111827] rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 border border-slate-800 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-2xl bg-emerald-950/80 text-emerald-400 border border-emerald-800 flex items-center justify-center shrink-0">
             <ShieldCheck className="w-5 h-5" />
@@ -323,22 +323,22 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       </div>
 
       {/* Attendance Visual Ratio & Monthly Summaries */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3.5 sm:gap-6">
         
         {/* Attendance Visual Ratio */}
-        <div className="lg:col-span-2 rounded-3xl bg-[#111827] p-6 border border-slate-800 shadow-xl space-y-4">
+        <div className="lg:col-span-2 rounded-2xl sm:rounded-3xl bg-[#111827] p-4 sm:p-6 border border-slate-800 shadow-xl space-y-3.5 sm:space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="font-bold text-base text-white">
+              <h3 className="font-bold text-sm sm:text-base text-white">
                 {t.todayOverview}
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-[11px] sm:text-xs text-slate-400">
                 P (1 Shift) • D (2 Shifts) • A (0 Shift)
               </p>
             </div>
             <button
               onClick={onOpenBulkAttendance}
-              className="text-xs font-bold text-emerald-400 hover:text-emerald-300 flex items-center gap-1"
+              className="text-xs font-bold text-emerald-400 hover:text-emerald-300 flex items-center gap-1 cursor-pointer"
             >
               <span>{t.bulkAttendance}</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -346,7 +346,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </div>
 
           {/* Segmented Progress Bar */}
-          <div className="w-full h-4 bg-[#1E293B] rounded-full overflow-hidden flex p-0.5 shadow-inner border border-slate-800">
+          <div className="w-full h-3.5 sm:h-4 bg-[#1E293B] rounded-full overflow-hidden flex p-0.5 shadow-inner border border-slate-800">
             <div
               style={{ width: `${(presentToday / (totalCount || 1)) * 100}%` }}
               className="bg-emerald-500 h-full rounded-l-full transition-all duration-500"
@@ -365,33 +365,33 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </div>
 
           {/* Legend Badges */}
-          <div className="grid grid-cols-3 gap-2 pt-1 text-xs">
-            <div className="flex items-center gap-2 p-2 rounded-xl bg-[#1E293B] text-emerald-300 border border-emerald-900/40">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-              <span>P: <b>{presentToday}</b></span>
+          <div className="grid grid-cols-3 gap-1.5 sm:gap-2 pt-0.5 text-xs">
+            <div className="flex items-center gap-1.5 sm:gap-2 p-1.5 sm:p-2 rounded-xl bg-[#1E293B] text-emerald-300 border border-emerald-900/40 text-[11px] sm:text-xs">
+              <span className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-emerald-500 shrink-0" />
+              <span className="truncate">P: <b>{presentToday}</b></span>
             </div>
-            <div className="flex items-center gap-2 p-2 rounded-xl bg-[#1E293B] text-blue-300 border border-blue-900/40">
-              <span className="w-2.5 h-2.5 rounded-full bg-blue-600" />
-              <span>D (2x): <b>{doubleDutyToday}</b></span>
+            <div className="flex items-center gap-1.5 sm:gap-2 p-1.5 sm:p-2 rounded-xl bg-[#1E293B] text-blue-300 border border-blue-900/40 text-[11px] sm:text-xs">
+              <span className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-blue-600 shrink-0" />
+              <span className="truncate">D (2x): <b>{doubleDutyToday}</b></span>
             </div>
-            <div className="flex items-center gap-2 p-2 rounded-xl bg-[#1E293B] text-rose-300 border border-rose-900/40">
-              <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
-              <span>A: <b>{absentToday}</b></span>
+            <div className="flex items-center gap-1.5 sm:gap-2 p-1.5 sm:p-2 rounded-xl bg-[#1E293B] text-rose-300 border border-rose-900/40 text-[11px] sm:text-xs">
+              <span className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-rose-500 shrink-0" />
+              <span className="truncate">A: <b>{absentToday}</b></span>
             </div>
           </div>
 
           {/* Department Breakdown */}
-          <div className="pt-3 border-t border-slate-800">
-            <span className="text-xs font-bold text-slate-300 block mb-2">
+          <div className="pt-2.5 sm:pt-3 border-t border-slate-800">
+            <span className="text-[11px] sm:text-xs font-bold text-slate-300 block mb-1.5 sm:mb-2">
               {t.department} Presence
             </span>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2">
               {Object.entries(deptCounts).map(([dept, counts]) => (
                 <div
                   key={dept}
-                  className="px-3 py-1.5 rounded-xl bg-[#1E293B] border border-slate-700/60 text-xs flex items-center gap-2"
+                  className="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg sm:rounded-xl bg-[#1E293B] border border-slate-700/60 text-[11px] sm:text-xs flex items-center gap-1.5"
                 >
-                  <Building2 className="w-3.5 h-3.5 text-slate-400" />
+                  <Building2 className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-slate-400" />
                   <span className="font-semibold text-slate-200">{dept}:</span>
                   <span className="text-emerald-400 font-bold">
                     {counts.present + counts.double}/{counts.total} ({counts.double > 0 ? `+${counts.double}D` : ''})
@@ -403,46 +403,46 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         </div>
 
         {/* Monthly Summary Card (Attendance & Salary Combined) */}
-        <div className="rounded-3xl bg-[#111827] p-6 border border-slate-800 shadow-xl flex flex-col justify-between space-y-4">
+        <div className="rounded-2xl sm:rounded-3xl bg-[#111827] p-4 sm:p-6 border border-slate-800 shadow-xl flex flex-col justify-between space-y-3.5 sm:space-y-4">
           <div>
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between mb-1.5 sm:mb-2">
               <div className="flex items-center gap-2 text-emerald-400">
-                <Banknote className="w-5 h-5" />
-                <span className="font-bold text-sm uppercase tracking-wider">{t.totalPayroll}</span>
+                <Banknote className="w-4 sm:w-5 h-4 sm:h-5" />
+                <span className="font-bold text-xs sm:text-sm uppercase tracking-wider">{t.totalPayroll}</span>
               </div>
-              <span className="text-xs font-mono font-bold bg-[#1E293B] px-2 py-0.5 rounded text-slate-300 border border-slate-700">{currentMonthStr}</span>
+              <span className="text-[10px] sm:text-xs font-mono font-bold bg-[#1E293B] px-2 py-0.5 rounded text-slate-300 border border-slate-700">{currentMonthStr}</span>
             </div>
 
-            <div className="mt-3">
-              <span className="text-xs text-slate-400 font-medium">Estimated Net Disbursement</span>
-              <div className="text-2xl sm:text-3xl font-extrabold text-white mt-1">
+            <div className="mt-2 sm:mt-3">
+              <span className="text-[11px] sm:text-xs text-slate-400 font-medium">Estimated Net Disbursement</span>
+              <div className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white mt-0.5">
                 {settings.currencySymbol} {totalEstimatedPayroll.toLocaleString('en-IN')}
               </div>
             </div>
 
             {/* Monthly Attendance Summary Metrics */}
-            <div className="mt-4 p-3 bg-[#1E293B] rounded-2xl space-y-1.5 border border-slate-800 text-xs">
-              <span className="font-bold text-slate-300 block text-[11px] uppercase tracking-wider">
+            <div className="mt-3 sm:mt-4 p-2.5 sm:p-3 bg-[#1E293B] rounded-xl sm:rounded-2xl space-y-1.5 border border-slate-800 text-xs">
+              <span className="font-bold text-slate-300 block text-[10px] sm:text-[11px] uppercase tracking-wider">
                 Monthly Attendance Summary
               </span>
-              <div className="grid grid-cols-3 gap-1 text-center pt-1">
-                <div className="p-1.5 rounded bg-[#111827] border border-slate-800">
-                  <span className="text-[10px] text-emerald-400 font-bold block">P (1x)</span>
-                  <span className="font-black text-white">{monthPCount}</span>
+              <div className="grid grid-cols-3 gap-1 text-center pt-0.5">
+                <div className="p-1 sm:p-1.5 rounded bg-[#111827] border border-slate-800">
+                  <span className="text-[9px] sm:text-[10px] text-emerald-400 font-bold block">P (1x)</span>
+                  <span className="font-black text-white text-xs sm:text-sm">{monthPCount}</span>
                 </div>
-                <div className="p-1.5 rounded bg-[#111827] border border-slate-800">
-                  <span className="text-[10px] text-blue-400 font-bold block">D (2x)</span>
-                  <span className="font-black text-white">{monthDCount}</span>
+                <div className="p-1 sm:p-1.5 rounded bg-[#111827] border border-slate-800">
+                  <span className="text-[9px] sm:text-[10px] text-blue-400 font-bold block">D (2x)</span>
+                  <span className="font-black text-white text-xs sm:text-sm">{monthDCount}</span>
                 </div>
-                <div className="p-1.5 rounded bg-[#111827] border border-slate-800">
-                  <span className="text-[10px] text-rose-400 font-bold block">A (0x)</span>
-                  <span className="font-black text-white">{monthACount}</span>
+                <div className="p-1 sm:p-1.5 rounded bg-[#111827] border border-slate-800">
+                  <span className="text-[9px] sm:text-[10px] text-rose-400 font-bold block">A (0x)</span>
+                  <span className="font-black text-white text-xs sm:text-sm">{monthACount}</span>
                 </div>
               </div>
             </div>
 
             {/* Monthly Salary Summary Details */}
-            <div className="mt-3 space-y-1.5 text-xs text-slate-300">
+            <div className="mt-2.5 sm:mt-3 space-y-1 sm:space-y-1.5 text-[11px] sm:text-xs text-slate-300">
               <div className="flex justify-between py-1 border-b border-slate-800">
                 <span>Total Payable Shifts:</span>
                 <span className="font-black text-white">{monthTotalPayableShifts} Shifts</span>
@@ -460,7 +460,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
           <button
             onClick={() => onNavigateTab('salary')}
-            className="w-full py-2.5 rounded-2xl bg-[#1E293B] hover:bg-slate-700 text-white text-xs font-bold transition-all flex items-center justify-center gap-2 border border-slate-700"
+            className="w-full py-2 sm:py-2.5 rounded-xl sm:rounded-2xl bg-[#1E293B] hover:bg-slate-700 text-white text-xs font-bold transition-all flex items-center justify-center gap-2 border border-slate-700 cursor-pointer active:scale-95"
           >
             <span>{t.salaryTitle}</span>
             <ArrowRight className="w-4 h-4" />
@@ -469,7 +469,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       </div>
 
       {/* Quick Launchpad & Roster Section */}
-      <div className="rounded-3xl bg-[#111827] p-6 border border-slate-800 shadow-xl space-y-4">
+      <div className="rounded-2xl sm:rounded-3xl bg-[#111827] p-4 sm:p-6 border border-slate-800 shadow-xl space-y-3 sm:space-y-4">
         <div className="flex items-center justify-between">
           <div>
             <h3 className="font-bold text-base text-white">

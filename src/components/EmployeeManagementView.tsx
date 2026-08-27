@@ -91,7 +91,7 @@ export const EmployeeManagementView: React.FC<EmployeeManagementViewProps> = ({
   };
 
   return (
-    <div id="employee-management-container" className="space-y-6 pb-12 animate-fade-in text-slate-100">
+    <div id="employee-management-container" className="space-y-4 sm:space-y-5 animate-fade-in text-slate-100">
       
       {/* Header & Main Actions */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">

@@ -213,7 +213,7 @@ export const AttendanceView: React.FC<AttendanceViewProps> = ({
   };
 
   return (
-    <div className="space-y-4 pb-20 max-w-4xl mx-auto text-slate-100">
+    <div className="space-y-3.5 sm:space-y-4 max-w-4xl mx-auto text-slate-100">
       {/* Header & Subtabs */}
       <div className="bg-[#111827] rounded-2xl p-4 border border-slate-800 shadow-xl space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
