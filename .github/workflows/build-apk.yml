@@ -7,6 +7,7 @@ on:
 
 jobs:
   build-apk:
+    name: Build Android APK
     runs-on: ubuntu-latest
 
     steps:
@@ -19,8 +20,8 @@ jobs:
           node-version: 20
           cache: 'npm'
 
-      - name: Install Dependencies
-        run: npm ci || npm install
+      - name: Install Node Dependencies
+        run: npm ci
 
       - name: Build Web Application
         run: npm run build
@@ -31,21 +32,26 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
-      - name: Install Capacitor CLI & Android Platform
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Initialize & Synchronize Capacitor Android
         run: |
-          npm install @capacitor/core @capacitor/cli @capacitor/android
-          npx cap add android || true
+          if [ ! -d "android" ]; then
+            npx cap add android
+          fi
           npx cap sync android
 
-      - name: Build Android Release APK
+      - name: Build Android APKs (Release & Debug)
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleRelease --no-daemon
+          ./gradlew assembleDebug assembleRelease --no-daemon
 
-      - name: Upload Release APK Artifact
+      - name: Upload APKs Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: SumitWorkforcePro-Release-APK
-          path: android/app/build/outputs/apk/release/app-release-unsigned.apk
-          if-no-files-found: warn
+          name: SumitWorkforcePro-APKs
+          path: android/app/build/outputs/apk/**/*.apk
+          if-no-files-found: error
+
