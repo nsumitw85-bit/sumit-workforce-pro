@@ -22,7 +22,7 @@ import {
 import { Employee, AttendanceRecord, CompanySettings } from '../types';
 import { calculateMonthlySalaries } from '../utils/storage';
 import { generateIndividualPaySlipPDF } from '../utils/pdfGenerator';
-import { sharePdfToWhatsApp } from '../utils/shareUtils';
+import { sharePdfToWhatsApp, openWhatsAppDirect } from '../utils/shareUtils';
 import { translations } from '../utils/translations';
 
 interface EmployeeProfileModalProps {
@@ -67,7 +67,12 @@ export const EmployeeProfileModal: React.FC<EmployeeProfileModalProps> = ({
     await sharePdfToWhatsApp({
       doc,
       filename: `PaySlip_${employee.id}_${selectedMonth}.pdf`,
-      title: `${settings.companyName || 'Sumit Enterprises & Tech Solutions'} - Pay Slip (${employee.name} - ${selectedMonth})`
+      title: `${settings.companyName || 'Sumit Enterprises & Tech Solutions'} - Pay Slip (${employee.name} - ${selectedMonth})`,
+      phone: employee.mobile,
+      employeeId: employee.id,
+      employeeName: employee.name,
+      reportType: 'individual_payslip',
+      period: selectedMonth
     });
   };
 
@@ -82,8 +87,7 @@ export const EmployeeProfileModal: React.FC<EmployeeProfileModalProps> = ({
   };
 
   const handleWhatsApp = () => {
-    const cleanPhone = employee.mobile.replace(/[^0-9]/g, '');
-    window.open(`https://wa.me/${cleanPhone}`, '_blank');
+    openWhatsAppDirect(employee.mobile, `Hello ${employee.name}, regarding your work at ${settings.companyName || 'Sumit Workforce Pro'}`);
   };
 
   return (

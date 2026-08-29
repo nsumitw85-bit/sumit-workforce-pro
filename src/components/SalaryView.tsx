@@ -106,7 +106,12 @@ export const SalaryView: React.FC<SalaryViewProps> = ({
     const res = await sharePdfToWhatsApp({
       doc,
       filename: `PaySlip_${emp.id}_${slip.month}.pdf`,
-      title: `${settings.companyName || 'Sumit Enterprises & Tech Solutions'} - Pay Slip (${emp.name} - ${slip.month})`
+      title: `${settings.companyName || 'Sumit Enterprises & Tech Solutions'} - Pay Slip (${emp.name} - ${slip.month})`,
+      phone: emp.mobile,
+      employeeId: emp.id,
+      employeeName: emp.name,
+      reportType: 'individual_payslip',
+      period: slip.month
     });
     onShowToast(res.message);
   };
