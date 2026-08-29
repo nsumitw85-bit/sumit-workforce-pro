@@ -22,7 +22,7 @@ import {
 import { Employee, AttendanceRecord, CompanySettings } from '../types';
 import { calculateMonthlySalaries } from '../utils/storage';
 import { generateIndividualPaySlipPDF } from '../utils/pdfGenerator';
-import { sharePdfToWhatsApp, openWhatsAppDirect } from '../utils/shareUtils';
+import { sharePdfToWhatsApp } from '../utils/shareUtils';
 import { translations } from '../utils/translations';
 
 interface EmployeeProfileModalProps {
@@ -87,7 +87,12 @@ export const EmployeeProfileModal: React.FC<EmployeeProfileModalProps> = ({
   };
 
   const handleWhatsApp = () => {
-    openWhatsAppDirect(employee.mobile, `Hello ${employee.name}, regarding your work at ${settings.companyName || 'Sumit Workforce Pro'}`);
+    let cleanPhone = employee.mobile.replace(/[^0-9]/g, '');
+    if (cleanPhone.length === 10) {
+      cleanPhone = `91${cleanPhone}`;
+    }
+    const msg = encodeURIComponent(`Hello ${employee.name}, regarding your work at ${settings.companyName || 'Sumit Workforce Pro'}`);
+    window.open(`https://wa.me/${cleanPhone}?text=${msg}`, '_blank');
   };
 
   return (

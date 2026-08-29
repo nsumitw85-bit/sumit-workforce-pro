@@ -3,99 +3,36 @@ import { archivePdfReport } from './storage';
 
 /**
  * Share PDF file directly via WhatsApp or Native Share Sheet.
- * STRICT RULE: No change to PDF generation or A4 layout. Exports exact PDF and shares it.
+ * STRICT RULE: No change to PDF generation or A4 layout. Converts doc to real Blob and File object, and shares the actual PDF file via navigator.share.
  */
 export interface SharePdfOptions {
   doc: jsPDF;
   filename: string;
   title: string;
-  phone?: string; // Optional phone number
+  phone?: string;
   reportType?: any;
   period?: string;
   employeeId?: string;
   employeeName?: string;
 }
 
-/**
- * Formats a phone number for international WhatsApp deep links.
- * Adds default '91' country code for standard 10-digit Indian numbers if missing.
- */
-export const formatWhatsAppPhone = (phone?: string): string => {
-  if (!phone) return '';
-  let clean = phone.replace(/[^0-9]/g, '');
-  if (clean.length === 10) {
-    clean = `91${clean}`;
-  }
-  return clean;
-};
-
-/**
- * Direct WhatsApp Mobile Intent opener for mobile devices.
- * Always targets mobile WhatsApp app (wa.me / api.whatsapp.com / whatsapp://) and never web.whatsapp.com.
- */
-export const openWhatsAppDirect = (phone?: string, text?: string): void => {
-  const cleanPhone = formatWhatsAppPhone(phone);
-  const encodedText = text ? encodeURIComponent(text) : '';
-  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-  let targetUrl: string;
-
-  if (cleanPhone) {
-    if (isMobile) {
-      targetUrl = encodedText 
-        ? `whatsapp://send?phone=${cleanPhone}&text=${encodedText}`
-        : `https://wa.me/${cleanPhone}`;
-    } else {
-      targetUrl = encodedText
-        ? `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodedText}`
-        : `https://wa.me/${cleanPhone}`;
-    }
-  } else {
-    if (isMobile) {
-      targetUrl = encodedText
-        ? `whatsapp://send?text=${encodedText}`
-        : `https://api.whatsapp.com/send?text=${encodedText}`;
-    } else {
-      targetUrl = encodedText
-        ? `https://api.whatsapp.com/send?text=${encodedText}`
-        : `https://api.whatsapp.com/send`;
-    }
-  }
-
-  try {
-    const a = document.createElement('a');
-    a.href = targetUrl;
-    a.target = '_blank';
-    a.rel = 'noopener noreferrer';
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(() => {
-      document.body.removeChild(a);
-    }, 100);
-  } catch (e) {
-    window.location.href = targetUrl;
-  }
-};
-
 export const sharePdfToWhatsApp = async (options: SharePdfOptions): Promise<{ success: boolean; message: string }> => {
   const { 
     doc, 
-    filename, 
-    title, 
-    phone, 
+    filename = 'Attendance_Report.pdf', 
+    title = 'Attendance Report PDF', 
     reportType = 'monthly_attendance', 
     period = new Date().toISOString().slice(0, 7), 
     employeeId, 
     employeeName 
   } = options;
 
-  const cleanPhone = formatWhatsAppPhone(phone);
-
   try {
-    const blob = doc.output('blob');
-    const fileSizeKb = Math.round(blob.size / 1024);
+    // 1. Convert the generated jsPDF document into a real Blob and then into a File object
+    const pdfBlob = doc.output('blob');
+    const fileSizeKb = Math.round(pdfBlob.size / 1024);
 
-    // Auto Archive in persistent storage (zero layout disruption)
+    // Auto Archive in persistent storage
     try {
       archivePdfReport({
         title,
@@ -110,40 +47,35 @@ export const sharePdfToWhatsApp = async (options: SharePdfOptions): Promise<{ su
       console.warn('Auto-archive deferred', e);
     }
 
-    const file = new File([blob], filename, { type: 'application/pdf' });
+    const pdfFile = new File([pdfBlob], filename, { type: 'application/pdf' });
 
-    // 1. If native Web Share API with file attachment is supported (Android Chrome / iOS / Capacitor)
-    // This directly invokes the Android system share sheet with WhatsApp at the top and attaches the exact PDF file
-    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+    // 2. Use navigator.share with the PDF file attachment to open the phone's native share sheet with the actual PDF document attached
+    if (typeof navigator !== 'undefined' && navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
       try {
         await navigator.share({
-          files: [file],
-          title: title,
-          text: `📄 ${title} (${filename})`
+          files: [pdfFile],
+          title: title || 'Attendance Report PDF',
+          text: 'A4 Printable Attendance Report'
         });
-        return { success: true, message: 'PDF document shared to WhatsApp & Saved to PDF Archive' };
+        return { success: true, message: 'PDF document shared via WhatsApp / Native Share' };
       } catch (shareErr: any) {
         if (shareErr.name === 'AbortError') {
           return { success: false, message: 'Sharing cancelled' };
         }
-        console.warn('Native share failed, falling back to direct WhatsApp intent', shareErr);
+        console.warn('Native share error, falling back to direct download', shareErr);
       }
     }
 
-    // 2. Direct mobile fallback: Save the exact A4 PDF to local downloads immediately
+    // 3. Fallback: Trigger direct PDF download so the user gets the exact A4 printable PDF immediately
     doc.save(filename);
-
-    // 3. Directly open WhatsApp mobile application (using wa.me / api.whatsapp.com / whatsapp:// deep link)
-    const shareMessage = `📄 *${title}*\nAttached A4 Report: ${filename}\nSaved in Downloads. Sharing via Sumit Workforce Pro.`;
-    openWhatsAppDirect(cleanPhone, shareMessage);
 
     return { 
       success: true, 
-      message: 'A4 PDF saved to Downloads & Archive! Opening mobile WhatsApp...' 
+      message: 'A4 PDF Report downloaded successfully!' 
     };
   } catch (err: any) {
     doc.save(filename);
-    return { success: true, message: 'A4 PDF downloaded & archived successfully!' };
+    return { success: true, message: 'A4 PDF downloaded successfully!' };
   }
 };
 
@@ -151,17 +83,18 @@ export const sharePdfToWhatsApp = async (options: SharePdfOptions): Promise<{ su
  * Direct PDF export and Native Share
  */
 export const sharePdfNative = async (options: SharePdfOptions): Promise<{ success: boolean; message: string }> => {
-  const { doc, filename, title, phone } = options;
+  const { doc, filename = 'Attendance_Report.pdf', title = 'Attendance Report PDF' } = options;
 
   try {
-    const blob = doc.output('blob');
-    const file = new File([blob], filename, { type: 'application/pdf' });
+    const pdfBlob = doc.output('blob');
+    const pdfFile = new File([pdfBlob], filename, { type: 'application/pdf' });
 
-    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+    if (typeof navigator !== 'undefined' && navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
       try {
         await navigator.share({
-          files: [file],
-          title: title
+          files: [pdfFile],
+          title: title || 'Attendance Report PDF',
+          text: 'A4 Printable Attendance Report'
         });
         return { success: true, message: 'PDF shared successfully' };
       } catch (shareErr: any) {
@@ -171,11 +104,8 @@ export const sharePdfNative = async (options: SharePdfOptions): Promise<{ succes
       }
     }
 
-    // Fallback: Download PDF and open WhatsApp mobile
+    // Fallback: Download PDF
     doc.save(filename);
-    if (phone) {
-      openWhatsAppDirect(phone, `📄 *${title}*`);
-    }
     return { success: true, message: 'A4 PDF Report downloaded successfully!' };
   } catch (err) {
     doc.save(filename);
