@@ -10,9 +10,9 @@ import {
   Layers, 
   Download, 
   Share2, 
-  Users,
-  FileCheck2,
-  Printer
+  Users, 
+  FileCheck2, 
+  Printer 
 } from 'lucide-react';
 import { Employee, AttendanceRecord, CompanySettings } from '../types';
 import { translations } from '../utils/translations';
@@ -29,7 +29,7 @@ import {
   generateEmployeeListPDF,
   generateCompleteSummaryPDF
 } from '../utils/pdfGenerator';
-import { sharePdfToWhatsApp } from '../utils/shareUtils';
+import { sharePdfToWhatsApp, downloadPdf, viewOrPrintPdf } from '../utils/shareUtils';
 
 interface ReportsViewProps {
   employees: Employee[];
@@ -55,187 +55,242 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
   );
 
   // 1. Daily Attendance Report
-  const handleDailyAttendance = async (action: 'download' | 'share') => {
+  const handleDailyAttendance = async (action: 'download' | 'share' | 'view') => {
     const doc = generateDailyAttendancePDF(selectedDate, employees, attendance, settings);
     const filename = `Daily_Attendance_${selectedDate}.pdf`;
     if (action === 'download') {
-      doc.save(filename);
+      downloadPdf(doc, filename);
       onShowToast('Daily Attendance A4 PDF downloaded!');
+    } else if (action === 'view') {
+      viewOrPrintPdf(doc, filename);
+      onShowToast('Opening Daily Attendance PDF for Print / Preview...');
     } else {
       const res = await sharePdfToWhatsApp({
         doc,
         filename,
-        title: `${settings.companyName || 'Sumit Enterprises & Tech Solutions'} - Daily Attendance (${selectedDate})`
+        title: `${settings.companyName || 'Sumit Enterprises & Tech Solutions'} - Daily Attendance (${selectedDate})`,
+        reportType: 'daily_attendance',
+        period: selectedDate
       });
       onShowToast(res.message);
     }
   };
 
   // 2. Weekly Attendance Report
-  const handleWeeklyAttendance = async (action: 'download' | 'share') => {
+  const handleWeeklyAttendance = async (action: 'download' | 'share' | 'view') => {
     const doc = generateWeeklyAttendancePDF(selectedDate, employees, attendance, settings);
     const filename = `Weekly_Attendance_${selectedDate}.pdf`;
     if (action === 'download') {
-      doc.save(filename);
+      downloadPdf(doc, filename);
       onShowToast('Weekly Attendance A4 PDF downloaded!');
+    } else if (action === 'view') {
+      viewOrPrintPdf(doc, filename);
+      onShowToast('Opening Weekly Attendance PDF for Print / Preview...');
     } else {
       const res = await sharePdfToWhatsApp({
         doc,
         filename,
-        title: `${settings.companyName || 'Sumit Enterprises & Tech Solutions'} - Weekly Attendance Report`
+        title: `${settings.companyName || 'Sumit Enterprises & Tech Solutions'} - Weekly Attendance Report`,
+        reportType: 'weekly_attendance',
+        period: selectedDate
       });
       onShowToast(res.message);
     }
   };
 
   // 3. Monthly Attendance Report
-  const handleMonthlyAttendance = async (action: 'download' | 'share') => {
+  const handleMonthlyAttendance = async (action: 'download' | 'share' | 'view') => {
     const doc = generateMonthlyAttendancePDF(selectedMonth, employees, attendance, settings);
     const filename = `Monthly_Attendance_${selectedMonth}.pdf`;
     if (action === 'download') {
-      doc.save(filename);
+      downloadPdf(doc, filename);
       onShowToast('Monthly Attendance A4 PDF downloaded!');
+    } else if (action === 'view') {
+      viewOrPrintPdf(doc, filename);
+      onShowToast('Opening Monthly Attendance PDF for Print / Preview...');
     } else {
       const res = await sharePdfToWhatsApp({
         doc,
         filename,
-        title: `${settings.companyName || 'Sumit Enterprises & Tech Solutions'} - Monthly Attendance (${selectedMonth})`
+        title: `${settings.companyName || 'Sumit Enterprises & Tech Solutions'} - Monthly Attendance (${selectedMonth})`,
+        reportType: 'monthly_attendance',
+        period: selectedMonth
       });
       onShowToast(res.message);
     }
   };
 
   // 4. Daily Salary Report
-  const handleDailySalary = async (action: 'download' | 'share') => {
+  const handleDailySalary = async (action: 'download' | 'share' | 'view') => {
     const doc = generateDailySalaryPDF(selectedDate, employees, attendance, settings);
     const filename = `Daily_Salary_${selectedDate}.pdf`;
     if (action === 'download') {
-      doc.save(filename);
+      downloadPdf(doc, filename);
       onShowToast('Daily Salary A4 PDF downloaded!');
+    } else if (action === 'view') {
+      viewOrPrintPdf(doc, filename);
+      onShowToast('Opening Daily Salary PDF for Print / Preview...');
     } else {
       const res = await sharePdfToWhatsApp({
         doc,
         filename,
-        title: `${settings.companyName || 'Sumit Enterprises & Tech Solutions'} - Daily Salary Report (${selectedDate})`
+        title: `${settings.companyName || 'Sumit Enterprises & Tech Solutions'} - Daily Salary Report (${selectedDate})`,
+        reportType: 'daily_salary',
+        period: selectedDate
       });
       onShowToast(res.message);
     }
   };
 
   // 5. Weekly Salary Report
-  const handleWeeklySalary = async (action: 'download' | 'share') => {
+  const handleWeeklySalary = async (action: 'download' | 'share' | 'view') => {
     const doc = generateWeeklySalaryPDF(selectedDate, employees, attendance, settings);
     const filename = `Weekly_Salary_${selectedDate}.pdf`;
     if (action === 'download') {
-      doc.save(filename);
+      downloadPdf(doc, filename);
       onShowToast('Weekly Salary A4 PDF downloaded!');
+    } else if (action === 'view') {
+      viewOrPrintPdf(doc, filename);
+      onShowToast('Opening Weekly Salary PDF for Print / Preview...');
     } else {
       const res = await sharePdfToWhatsApp({
         doc,
         filename,
-        title: `${settings.companyName || 'Sumit Enterprises & Tech Solutions'} - Weekly Salary Report`
+        title: `${settings.companyName || 'Sumit Enterprises & Tech Solutions'} - Weekly Salary Report`,
+        reportType: 'weekly_salary',
+        period: selectedDate
       });
       onShowToast(res.message);
     }
   };
 
   // 6. Monthly Salary Report
-  const handleMonthlySalary = async (action: 'download' | 'share') => {
+  const handleMonthlySalary = async (action: 'download' | 'share' | 'view') => {
     const doc = generateMonthlySalaryPDF(selectedMonth, employees, attendance, settings);
     const filename = `Monthly_Salary_${selectedMonth}.pdf`;
     if (action === 'download') {
-      doc.save(filename);
+      downloadPdf(doc, filename);
       onShowToast('Monthly Salary A4 PDF downloaded!');
+    } else if (action === 'view') {
+      viewOrPrintPdf(doc, filename);
+      onShowToast('Opening Monthly Salary PDF for Print / Preview...');
     } else {
       const res = await sharePdfToWhatsApp({
         doc,
         filename,
-        title: `${settings.companyName || 'Sumit Enterprises & Tech Solutions'} - Monthly Salary Report (${selectedMonth})`
+        title: `${settings.companyName || 'Sumit Enterprises & Tech Solutions'} - Monthly Salary Report (${selectedMonth})`,
+        reportType: 'monthly_salary',
+        period: selectedMonth
       });
       onShowToast(res.message);
     }
   };
 
   // 7. Present Staff Report
-  const handlePresentSummary = async (action: 'download' | 'share') => {
+  const handlePresentSummary = async (action: 'download' | 'share' | 'view') => {
     const doc = generatePresentSummaryPDF(selectedMonth, employees, attendance, settings);
     const filename = `Present_Staff_Report_${selectedMonth}.pdf`;
     if (action === 'download') {
-      doc.save(filename);
+      downloadPdf(doc, filename);
       onShowToast('Present Staff A4 PDF Report downloaded!');
+    } else if (action === 'view') {
+      viewOrPrintPdf(doc, filename);
+      onShowToast('Opening Present Staff Report for Print / Preview...');
     } else {
       const res = await sharePdfToWhatsApp({
         doc,
         filename,
-        title: `${settings.companyName || 'Sumit Enterprises & Tech Solutions'} - Present Staff Report`
+        title: `${settings.companyName || 'Sumit Enterprises & Tech Solutions'} - Present Staff Report`,
+        reportType: 'present_summary',
+        period: selectedMonth
       });
       onShowToast(res.message);
     }
   };
 
   // 8. Absent Staff Report
-  const handleAbsentSummary = async (action: 'download' | 'share') => {
+  const handleAbsentSummary = async (action: 'download' | 'share' | 'view') => {
     const doc = generateAbsentSummaryPDF(selectedMonth, employees, attendance, settings);
     const filename = `Absent_Staff_Report_${selectedMonth}.pdf`;
     if (action === 'download') {
-      doc.save(filename);
+      downloadPdf(doc, filename);
       onShowToast('Absent Staff A4 PDF Report downloaded!');
+    } else if (action === 'view') {
+      viewOrPrintPdf(doc, filename);
+      onShowToast('Opening Absent Staff Report for Print / Preview...');
     } else {
       const res = await sharePdfToWhatsApp({
         doc,
         filename,
-        title: `${settings.companyName || 'Sumit Enterprises & Tech Solutions'} - Absent Staff Report`
+        title: `${settings.companyName || 'Sumit Enterprises & Tech Solutions'} - Absent Staff Report`,
+        reportType: 'absent_summary',
+        period: selectedMonth
       });
       onShowToast(res.message);
     }
   };
 
   // 9. Double Duty Report
-  const handleDoubleDutySummary = async (action: 'download' | 'share') => {
+  const handleDoubleDutySummary = async (action: 'download' | 'share' | 'view') => {
     const doc = generateDoubleDutySummaryPDF(selectedMonth, employees, attendance, settings);
     const filename = `Double_Duty_Report_${selectedMonth}.pdf`;
     if (action === 'download') {
-      doc.save(filename);
+      downloadPdf(doc, filename);
       onShowToast('Double Duty A4 PDF Report downloaded!');
+    } else if (action === 'view') {
+      viewOrPrintPdf(doc, filename);
+      onShowToast('Opening Double Duty Report for Print / Preview...');
     } else {
       const res = await sharePdfToWhatsApp({
         doc,
         filename,
-        title: `${settings.companyName || 'Sumit Enterprises & Tech Solutions'} - Double Duty Report (2x Shifts)`
+        title: `${settings.companyName || 'Sumit Enterprises & Tech Solutions'} - Double Duty Report (2x Shifts)`,
+        reportType: 'doubleduty_summary',
+        period: selectedMonth
       });
       onShowToast(res.message);
     }
   };
 
   // 10. Employee Master List
-  const handleEmployeeList = async (action: 'download' | 'share') => {
+  const handleEmployeeList = async (action: 'download' | 'share' | 'view') => {
     const doc = generateEmployeeListPDF(employees, settings);
     const filename = `Employee_Master_List_${selectedDate}.pdf`;
     if (action === 'download') {
-      doc.save(filename);
+      downloadPdf(doc, filename);
       onShowToast('Employee Master List A4 PDF downloaded!');
+    } else if (action === 'view') {
+      viewOrPrintPdf(doc, filename);
+      onShowToast('Opening Employee Master List for Print / Preview...');
     } else {
       const res = await sharePdfToWhatsApp({
         doc,
         filename,
-        title: `${settings.companyName || 'Sumit Enterprises & Tech Solutions'} - Employee Master List`
+        title: `${settings.companyName || 'Sumit Enterprises & Tech Solutions'} - Employee Master List`,
+        reportType: 'employee_list',
+        period: selectedDate
       });
       onShowToast(res.message);
     }
   };
 
   // 11. Complete Summary Report
-  const handleCompleteSummary = async (action: 'download' | 'share') => {
+  const handleCompleteSummary = async (action: 'download' | 'share' | 'view') => {
     const doc = generateCompleteSummaryPDF(selectedMonth, employees, attendance, settings);
     const filename = `Complete_Summary_Report_${selectedMonth}.pdf`;
     if (action === 'download') {
-      doc.save(filename);
+      downloadPdf(doc, filename);
       onShowToast('Complete Summary A4 PDF Report downloaded!');
+    } else if (action === 'view') {
+      viewOrPrintPdf(doc, filename);
+      onShowToast('Opening Complete Summary Report for Print / Preview...');
     } else {
       const res = await sharePdfToWhatsApp({
         doc,
         filename,
-        title: `${settings.companyName || 'Sumit Enterprises & Tech Solutions'} - Complete Summary Report (${selectedMonth})`
+        title: `${settings.companyName || 'Sumit Enterprises & Tech Solutions'} - Complete Summary Report (${selectedMonth})`,
+        reportType: 'complete_summary',
+        period: selectedMonth
       });
       onShowToast(res.message);
     }
@@ -314,11 +369,12 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
               </p>
             </div>
 
-            <div className="flex items-center gap-2 mt-4 pt-3 border-t border-slate-800">
+            <div className="flex items-center gap-1.5 mt-4 pt-3 border-t border-slate-800">
               <button
                 id="btn-daily-att-pdf"
                 onClick={() => handleDailyAttendance('download')}
                 className="flex-1 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center justify-center gap-1 shadow-md transition-colors"
+                title="Download A4 PDF"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>PDF</span>
@@ -326,11 +382,19 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
               <button
                 id="btn-daily-att-whatsapp"
                 onClick={() => handleDailyAttendance('share')}
-                className="px-2.5 py-1.5 rounded-xl bg-emerald-950/60 text-emerald-300 hover:bg-emerald-900/80 border border-emerald-800 text-xs font-semibold flex items-center gap-1 transition-colors"
+                className="flex-1 px-2 py-1.5 rounded-xl bg-emerald-950/60 text-emerald-300 hover:bg-emerald-900/80 border border-emerald-800 text-xs font-semibold flex items-center justify-center gap-1 transition-colors"
                 title="Share A4 PDF on WhatsApp"
               >
                 <Share2 className="w-3.5 h-3.5 text-emerald-400" />
                 <span>WhatsApp</span>
+              </button>
+              <button
+                id="btn-daily-att-view"
+                onClick={() => handleDailyAttendance('view')}
+                className="p-1.5 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-700 text-xs flex items-center justify-center transition-colors"
+                title="Print / View A4 PDF"
+              >
+                <Printer className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
@@ -352,11 +416,12 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
               </p>
             </div>
 
-            <div className="flex items-center gap-2 mt-4 pt-3 border-t border-slate-800">
+            <div className="flex items-center gap-1.5 mt-4 pt-3 border-t border-slate-800">
               <button
                 id="btn-weekly-att-pdf"
                 onClick={() => handleWeeklyAttendance('download')}
                 className="flex-1 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center justify-center gap-1 shadow-md transition-colors"
+                title="Download A4 PDF"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>PDF</span>
@@ -364,11 +429,19 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
               <button
                 id="btn-weekly-att-whatsapp"
                 onClick={() => handleWeeklyAttendance('share')}
-                className="px-2.5 py-1.5 rounded-xl bg-emerald-950/60 text-emerald-300 hover:bg-emerald-900/80 border border-emerald-800 text-xs font-semibold flex items-center gap-1 transition-colors"
+                className="flex-1 px-2 py-1.5 rounded-xl bg-emerald-950/60 text-emerald-300 hover:bg-emerald-900/80 border border-emerald-800 text-xs font-semibold flex items-center justify-center gap-1 transition-colors"
                 title="Share A4 PDF on WhatsApp"
               >
                 <Share2 className="w-3.5 h-3.5 text-emerald-400" />
                 <span>WhatsApp</span>
+              </button>
+              <button
+                id="btn-weekly-att-view"
+                onClick={() => handleWeeklyAttendance('view')}
+                className="p-1.5 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-700 text-xs flex items-center justify-center transition-colors"
+                title="Print / View A4 PDF"
+              >
+                <Printer className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
@@ -390,11 +463,12 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
               </p>
             </div>
 
-            <div className="flex items-center gap-2 mt-4 pt-3 border-t border-slate-800">
+            <div className="flex items-center gap-1.5 mt-4 pt-3 border-t border-slate-800">
               <button
                 id="btn-monthly-att-pdf"
                 onClick={() => handleMonthlyAttendance('download')}
                 className="flex-1 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center justify-center gap-1 shadow-md transition-colors"
+                title="Download A4 PDF"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>PDF</span>
@@ -402,11 +476,19 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
               <button
                 id="btn-monthly-att-whatsapp"
                 onClick={() => handleMonthlyAttendance('share')}
-                className="px-2.5 py-1.5 rounded-xl bg-emerald-950/60 text-emerald-300 hover:bg-emerald-900/80 border border-emerald-800 text-xs font-semibold flex items-center gap-1 transition-colors"
+                className="flex-1 px-2 py-1.5 rounded-xl bg-emerald-950/60 text-emerald-300 hover:bg-emerald-900/80 border border-emerald-800 text-xs font-semibold flex items-center justify-center gap-1 transition-colors"
                 title="Share A4 PDF on WhatsApp"
               >
                 <Share2 className="w-3.5 h-3.5 text-emerald-400" />
                 <span>WhatsApp</span>
+              </button>
+              <button
+                id="btn-monthly-att-view"
+                onClick={() => handleMonthlyAttendance('view')}
+                className="p-1.5 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-700 text-xs flex items-center justify-center transition-colors"
+                title="Print / View A4 PDF"
+              >
+                <Printer className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
@@ -440,11 +522,12 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
               </p>
             </div>
 
-            <div className="flex items-center gap-2 mt-4 pt-3 border-t border-slate-800">
+            <div className="flex items-center gap-1.5 mt-4 pt-3 border-t border-slate-800">
               <button
                 id="btn-daily-sal-pdf"
                 onClick={() => handleDailySalary('download')}
                 className="flex-1 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center justify-center gap-1 shadow-md transition-colors"
+                title="Download A4 PDF"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>PDF</span>
@@ -452,11 +535,19 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
               <button
                 id="btn-daily-sal-whatsapp"
                 onClick={() => handleDailySalary('share')}
-                className="px-2.5 py-1.5 rounded-xl bg-blue-950/60 text-blue-300 hover:bg-blue-900/80 border border-blue-800 text-xs font-semibold flex items-center gap-1 transition-colors"
+                className="flex-1 px-2 py-1.5 rounded-xl bg-blue-950/60 text-blue-300 hover:bg-blue-900/80 border border-blue-800 text-xs font-semibold flex items-center justify-center gap-1 transition-colors"
                 title="Share A4 PDF on WhatsApp"
               >
                 <Share2 className="w-3.5 h-3.5 text-blue-400" />
                 <span>WhatsApp</span>
+              </button>
+              <button
+                id="btn-daily-sal-view"
+                onClick={() => handleDailySalary('view')}
+                className="p-1.5 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-700 text-xs flex items-center justify-center transition-colors"
+                title="Print / View A4 PDF"
+              >
+                <Printer className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
@@ -478,11 +569,12 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
               </p>
             </div>
 
-            <div className="flex items-center gap-2 mt-4 pt-3 border-t border-slate-800">
+            <div className="flex items-center gap-1.5 mt-4 pt-3 border-t border-slate-800">
               <button
                 id="btn-weekly-sal-pdf"
                 onClick={() => handleWeeklySalary('download')}
                 className="flex-1 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center justify-center gap-1 shadow-md transition-colors"
+                title="Download A4 PDF"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>PDF</span>
@@ -490,11 +582,19 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
               <button
                 id="btn-weekly-sal-whatsapp"
                 onClick={() => handleWeeklySalary('share')}
-                className="px-2.5 py-1.5 rounded-xl bg-blue-950/60 text-blue-300 hover:bg-blue-900/80 border border-blue-800 text-xs font-semibold flex items-center gap-1 transition-colors"
+                className="flex-1 px-2 py-1.5 rounded-xl bg-blue-950/60 text-blue-300 hover:bg-blue-900/80 border border-blue-800 text-xs font-semibold flex items-center justify-center gap-1 transition-colors"
                 title="Share A4 PDF on WhatsApp"
               >
                 <Share2 className="w-3.5 h-3.5 text-blue-400" />
                 <span>WhatsApp</span>
+              </button>
+              <button
+                id="btn-weekly-sal-view"
+                onClick={() => handleWeeklySalary('view')}
+                className="p-1.5 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-700 text-xs flex items-center justify-center transition-colors"
+                title="Print / View A4 PDF"
+              >
+                <Printer className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
@@ -516,11 +616,12 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
               </p>
             </div>
 
-            <div className="flex items-center gap-2 mt-4 pt-3 border-t border-slate-800">
+            <div className="flex items-center gap-1.5 mt-4 pt-3 border-t border-slate-800">
               <button
                 id="btn-monthly-sal-pdf"
                 onClick={() => handleMonthlySalary('download')}
                 className="flex-1 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center justify-center gap-1 shadow-md transition-colors"
+                title="Download A4 PDF"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>PDF</span>
@@ -528,11 +629,19 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
               <button
                 id="btn-monthly-sal-whatsapp"
                 onClick={() => handleMonthlySalary('share')}
-                className="px-2.5 py-1.5 rounded-xl bg-blue-950/60 text-blue-300 hover:bg-blue-900/80 border border-blue-800 text-xs font-semibold flex items-center gap-1 transition-colors"
+                className="flex-1 px-2 py-1.5 rounded-xl bg-blue-950/60 text-blue-300 hover:bg-blue-900/80 border border-blue-800 text-xs font-semibold flex items-center justify-center gap-1 transition-colors"
                 title="Share A4 PDF on WhatsApp"
               >
                 <Share2 className="w-3.5 h-3.5 text-blue-400" />
                 <span>WhatsApp</span>
+              </button>
+              <button
+                id="btn-monthly-sal-view"
+                onClick={() => handleMonthlySalary('view')}
+                className="p-1.5 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-700 text-xs flex items-center justify-center transition-colors"
+                title="Print / View A4 PDF"
+              >
+                <Printer className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
@@ -566,11 +675,12 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
               </p>
             </div>
 
-            <div className="flex items-center gap-2 mt-4 pt-3 border-t border-slate-800">
+            <div className="flex items-center gap-1.5 mt-4 pt-3 border-t border-slate-800">
               <button
                 id="btn-present-sum-pdf"
                 onClick={() => handlePresentSummary('download')}
                 className="flex-1 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center justify-center gap-1 shadow-md transition-colors"
+                title="Download A4 PDF"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>PDF</span>
@@ -578,11 +688,19 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
               <button
                 id="btn-present-sum-whatsapp"
                 onClick={() => handlePresentSummary('share')}
-                className="px-2.5 py-1.5 rounded-xl bg-emerald-950/60 text-emerald-300 hover:bg-emerald-900/80 border border-emerald-800 text-xs font-semibold flex items-center gap-1 transition-colors"
+                className="flex-1 px-2 py-1.5 rounded-xl bg-emerald-950/60 text-emerald-300 hover:bg-emerald-900/80 border border-emerald-800 text-xs font-semibold flex items-center justify-center gap-1 transition-colors"
                 title="Share A4 PDF on WhatsApp"
               >
                 <Share2 className="w-3.5 h-3.5 text-emerald-400" />
                 <span>WhatsApp</span>
+              </button>
+              <button
+                id="btn-present-sum-view"
+                onClick={() => handlePresentSummary('view')}
+                className="p-1.5 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-700 text-xs flex items-center justify-center transition-colors"
+                title="Print / View A4 PDF"
+              >
+                <Printer className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
@@ -604,11 +722,12 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
               </p>
             </div>
 
-            <div className="flex items-center gap-2 mt-4 pt-3 border-t border-slate-800">
+            <div className="flex items-center gap-1.5 mt-4 pt-3 border-t border-slate-800">
               <button
                 id="btn-absent-sum-pdf"
                 onClick={() => handleAbsentSummary('download')}
                 className="flex-1 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold flex items-center justify-center gap-1 shadow-md transition-colors"
+                title="Download A4 PDF"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>PDF</span>
@@ -616,11 +735,19 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
               <button
                 id="btn-absent-sum-whatsapp"
                 onClick={() => handleAbsentSummary('share')}
-                className="px-2.5 py-1.5 rounded-xl bg-rose-950/60 text-rose-300 hover:bg-rose-900/80 border border-rose-800 text-xs font-semibold flex items-center gap-1 transition-colors"
+                className="flex-1 px-2 py-1.5 rounded-xl bg-rose-950/60 text-rose-300 hover:bg-rose-900/80 border border-rose-800 text-xs font-semibold flex items-center justify-center gap-1 transition-colors"
                 title="Share A4 PDF on WhatsApp"
               >
                 <Share2 className="w-3.5 h-3.5 text-rose-400" />
                 <span>WhatsApp</span>
+              </button>
+              <button
+                id="btn-absent-sum-view"
+                onClick={() => handleAbsentSummary('view')}
+                className="p-1.5 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-700 text-xs flex items-center justify-center transition-colors"
+                title="Print / View A4 PDF"
+              >
+                <Printer className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
@@ -645,11 +772,12 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
               </p>
             </div>
 
-            <div className="flex items-center gap-2 mt-4 pt-3 border-t border-slate-800">
+            <div className="flex items-center gap-1.5 mt-4 pt-3 border-t border-slate-800">
               <button
                 id="btn-doubleduty-sum-pdf"
                 onClick={() => handleDoubleDutySummary('download')}
                 className="flex-1 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold flex items-center justify-center gap-1 shadow-md transition-colors"
+                title="Download A4 PDF"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>PDF</span>
@@ -657,11 +785,19 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
               <button
                 id="btn-doubleduty-sum-whatsapp"
                 onClick={() => handleDoubleDutySummary('share')}
-                className="px-2.5 py-1.5 rounded-xl bg-indigo-950/60 text-indigo-300 hover:bg-indigo-900/80 border border-indigo-800 text-xs font-semibold flex items-center gap-1 transition-colors"
+                className="flex-1 px-2 py-1.5 rounded-xl bg-indigo-950/60 text-indigo-300 hover:bg-indigo-900/80 border border-indigo-800 text-xs font-semibold flex items-center justify-center gap-1 transition-colors"
                 title="Share A4 PDF on WhatsApp"
               >
                 <Share2 className="w-3.5 h-3.5 text-indigo-400" />
                 <span>WhatsApp</span>
+              </button>
+              <button
+                id="btn-doubleduty-sum-view"
+                onClick={() => handleDoubleDutySummary('view')}
+                className="p-1.5 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-700 text-xs flex items-center justify-center transition-colors"
+                title="Print / View A4 PDF"
+              >
+                <Printer className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
@@ -683,11 +819,12 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
               </p>
             </div>
 
-            <div className="flex items-center gap-2 mt-4 pt-3 border-t border-slate-800">
+            <div className="flex items-center gap-1.5 mt-4 pt-3 border-t border-slate-800">
               <button
                 id="btn-emp-master-pdf"
                 onClick={() => handleEmployeeList('download')}
                 className="flex-1 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold flex items-center justify-center gap-1 shadow-md transition-colors border border-slate-700"
+                title="Download A4 PDF"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>PDF</span>
@@ -695,11 +832,19 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
               <button
                 id="btn-emp-master-whatsapp"
                 onClick={() => handleEmployeeList('share')}
-                className="px-2.5 py-1.5 rounded-xl bg-[#1E293B] text-slate-300 hover:bg-slate-700 border border-slate-700 text-xs font-semibold flex items-center gap-1 transition-colors"
+                className="flex-1 px-2 py-1.5 rounded-xl bg-[#1E293B] text-slate-300 hover:bg-slate-700 border border-slate-700 text-xs font-semibold flex items-center justify-center gap-1 transition-colors"
                 title="Share A4 PDF on WhatsApp"
               >
-                <Share2 className="w-3.5 h-3.5" />
+                <Share2 className="w-3.5 h-3.5 text-slate-300" />
                 <span>WhatsApp</span>
+              </button>
+              <button
+                id="btn-emp-master-view"
+                onClick={() => handleEmployeeList('view')}
+                className="p-1.5 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-700 text-xs flex items-center justify-center transition-colors"
+                title="Print / View A4 PDF"
+              >
+                <Printer className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
@@ -728,18 +873,27 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
                 id="btn-complete-summary-pdf"
                 onClick={() => handleCompleteSummary('download')}
                 className="flex-1 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-md transition-colors"
+                title="Download Executive A4 PDF"
               >
                 <Download className="w-4 h-4" />
-                <span>Download Executive A4 PDF</span>
+                <span>Download A4 PDF</span>
               </button>
               <button
                 id="btn-complete-summary-whatsapp"
                 onClick={() => handleCompleteSummary('share')}
-                className="px-4 py-2 rounded-xl bg-emerald-950/60 text-emerald-300 hover:bg-emerald-900/80 border border-emerald-800 text-xs font-bold flex items-center gap-1.5 transition-colors"
+                className="px-3.5 py-2 rounded-xl bg-emerald-950/60 text-emerald-300 hover:bg-emerald-900/80 border border-emerald-800 text-xs font-bold flex items-center gap-1.5 transition-colors"
                 title="Share Executive PDF on WhatsApp"
               >
                 <Share2 className="w-4 h-4 text-emerald-400" />
-                <span>WhatsApp PDF</span>
+                <span>WhatsApp</span>
+              </button>
+              <button
+                id="btn-complete-summary-view"
+                onClick={() => handleCompleteSummary('view')}
+                className="p-2 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-700 text-xs flex items-center justify-center transition-colors"
+                title="Print / View Executive A4 PDF"
+              >
+                <Printer className="w-4 h-4" />
               </button>
             </div>
           </div>
@@ -748,3 +902,4 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
     </div>
   );
 };
+

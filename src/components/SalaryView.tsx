@@ -17,8 +17,8 @@ import { Employee, AttendanceRecord, SalarySlip, CompanySettings } from '../type
 import { calculateMonthlySalaries, isMonthLocked } from '../utils/storage';
 import { translations } from '../utils/translations';
 import { generateMonthlySalaryPDF, generateIndividualPaySlipPDF } from '../utils/pdfGenerator';
-import { sharePdfToWhatsApp } from '../utils/shareUtils';
-import { Lock } from 'lucide-react';
+import { sharePdfToWhatsApp, downloadPdf, viewOrPrintPdf } from '../utils/shareUtils';
+import { Lock, Printer } from 'lucide-react';
 
 interface SalaryViewProps {
   employees: Employee[];
@@ -87,8 +87,14 @@ export const SalaryView: React.FC<SalaryViewProps> = ({
 
   const handleDownloadMasterPDF = () => {
     const doc = generateMonthlySalaryPDF(selectedMonth, employees, attendance, settings);
-    doc.save(`Salary_Payroll_${selectedMonth}.pdf`);
+    downloadPdf(doc, `Salary_Payroll_${selectedMonth}.pdf`);
     onShowToast('Monthly Salary Payroll A4 PDF downloaded!');
+  };
+
+  const handleViewMasterPDF = () => {
+    const doc = generateMonthlySalaryPDF(selectedMonth, employees, attendance, settings);
+    viewOrPrintPdf(doc, `Salary_Payroll_${selectedMonth}.pdf`);
+    onShowToast('Opening Payroll PDF for Print / View...');
   };
 
   const handleShareMasterWhatsApp = async () => {
@@ -96,7 +102,9 @@ export const SalaryView: React.FC<SalaryViewProps> = ({
     const res = await sharePdfToWhatsApp({
       doc,
       filename: `Salary_Payroll_${selectedMonth}.pdf`,
-      title: `${settings.companyName || 'Sumit Enterprises & Tech Solutions'} - Monthly Payroll (${selectedMonth})`
+      title: `${settings.companyName || 'Sumit Enterprises & Tech Solutions'} - Monthly Payroll (${selectedMonth})`,
+      reportType: 'monthly_salary',
+      period: selectedMonth
     });
     onShowToast(res.message);
   };
@@ -178,11 +186,12 @@ export const SalaryView: React.FC<SalaryViewProps> = ({
             />
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             <button
               id="salary-pdf-btn"
               onClick={handleDownloadMasterPDF}
               className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-md"
+              title="Download Master Payroll PDF"
             >
               <Download className="w-3.5 h-3.5" />
               <span>Payroll PDF</span>
@@ -191,9 +200,18 @@ export const SalaryView: React.FC<SalaryViewProps> = ({
               id="salary-whatsapp-btn"
               onClick={handleShareMasterWhatsApp}
               className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-emerald-950/60 hover:bg-emerald-900/80 text-emerald-300 text-xs font-bold border border-emerald-800 transition-all"
+              title="Share Master Payroll on WhatsApp"
             >
               <Share2 className="w-3.5 h-3.5 text-emerald-400" />
               <span>WhatsApp</span>
+            </button>
+            <button
+              id="salary-view-btn"
+              onClick={handleViewMasterPDF}
+              className="p-1.5 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-700 text-xs flex items-center justify-center transition-colors"
+              title="Print / View Payroll PDF"
+            >
+              <Printer className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
@@ -421,13 +439,25 @@ export const SalaryView: React.FC<SalaryViewProps> = ({
               <button
                 onClick={() => {
                   const doc = generateIndividualPaySlipPDF(selectedSlip.slip, selectedSlip.emp, settings);
-                  doc.save(`PaySlip_${selectedSlip.emp.id}_${selectedSlip.slip.month}.pdf`);
+                  downloadPdf(doc, `PaySlip_${selectedSlip.emp.id}_${selectedSlip.slip.month}.pdf`);
                   onShowToast('Payslip PDF downloaded!');
                 }}
                 className="flex-1 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md transition-colors"
               >
                 <Download className="w-4 h-4" />
                 <span>{t.downloadPdf}</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  const doc = generateIndividualPaySlipPDF(selectedSlip.slip, selectedSlip.emp, settings);
+                  viewOrPrintPdf(doc, `PaySlip_${selectedSlip.emp.id}_${selectedSlip.slip.month}.pdf`);
+                  onShowToast('Opening Payslip for Print / View...');
+                }}
+                className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-xs flex items-center justify-center gap-1 shadow-md transition-colors"
+                title="Print / View Payslip"
+              >
+                <Printer className="w-4 h-4" />
               </button>
 
               <button

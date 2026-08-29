@@ -50,7 +50,7 @@ import {
   generateWeeklySalaryPDF,
   generateIndividualPaySlipPDF
 } from '../utils/pdfGenerator';
-import { sharePdfToWhatsApp } from '../utils/shareUtils';
+import { sharePdfToWhatsApp, downloadPdf } from '../utils/shareUtils';
 import { translations } from '../utils/translations';
 
 interface HistoryArchiveViewProps {
@@ -162,7 +162,7 @@ export const HistoryArchiveView: React.FC<HistoryArchiveViewProps> = ({
   // Download Monthly Attendance PDF for past month
   const handleDownloadMonthAttendance = (monthStr: string, monthName: string) => {
     const doc = generateMonthlyAttendancePDF(monthStr, employees, attendance, settings);
-    doc.save(`Monthly_Attendance_${monthStr}.pdf`);
+    downloadPdf(doc, `Monthly_Attendance_${monthStr}.pdf`);
     refreshHistoryData();
     onShowToast(`Downloaded Attendance PDF for ${monthName} ${selectedYear}`);
   };
@@ -184,7 +184,7 @@ export const HistoryArchiveView: React.FC<HistoryArchiveViewProps> = ({
   // Download Monthly Salary PDF for past month
   const handleDownloadMonthSalary = (monthStr: string, monthName: string) => {
     const doc = generateMonthlySalaryPDF(monthStr, employees, attendance, settings);
-    doc.save(`Monthly_Salary_${monthStr}.pdf`);
+    downloadPdf(doc, `Monthly_Salary_${monthStr}.pdf`);
     refreshHistoryData();
     onShowToast(`Downloaded Salary Payroll PDF for ${monthName} ${selectedYear}`);
   };
